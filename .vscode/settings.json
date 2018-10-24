@@ -1,0 +1,9 @@
+{
+    "editor.tabSize": 2,
+    "git.ignoreLimitWarning": true,
+    "files.eol": "\n",
+    "eslint.options": {
+        "configFile": ".eslintrc"
+    },
+    "jest.pathToConfig": ".jestrc.json",
+}

@@ -1,0 +1,30 @@
+{
+    "browser": true,
+      "collectCoverage": true,
+      "collectCoverageFrom": [
+        "**/*.{js,jsx}",
+        "!src/index.js",
+        "!**/node_modules/**",
+        "!**/dist/**",
+        "!**/reports/**",
+        "!**/storybook/**"
+      ],
+      "coverageDirectory": "reports/coverage",
+      "coveragePathIgnorePatterns": ["/node_modules/"],
+      "coverageThreshold": {
+        "global": {
+          "branches": 90,
+          "functions": 90,
+          "lines": 90,
+          "statements": 90
+        }
+      },
+      "globals": {
+        "__DEV__": true
+      },
+      "testMatch": ["**/?(*.)+(spec|test).js?(x)"],
+      "transform": {
+        "^.+\\.jsx?$": "babel-jest"
+      },
+      "setupFiles": ["<rootDir>/../../config/jest/setupTests.js"]
+  }

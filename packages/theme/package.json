@@ -1,0 +1,29 @@
+{
+    "name": "@juneui/theme",
+    "version": "0.0.1",
+    "description": "",
+    "scripts": {
+      "prepublish": ""
+    },
+    "main": "dist/index.js",
+    "author": {
+      "name": "Jeco Fang",
+      "email": "jeco.fang@163.com"
+    },
+    "license": "MIT",
+    "peerDependencies": {
+      "@storybook/addon-actions": "^4.0.0-rc.3",
+      "@storybook/addon-knobs": "^4.0.0-rc.3",
+      "@storybook/react": "^4.0.0-rc.3",
+      "enzyme": "^3.6.0",
+      "lodash.get": "^4.4.2",
+      "lodash.merge": "^4.6.1",
+      "hoist-non-react-statics": "^3.0.1",
+      "prop-types": "^15.6.2",
+      "react": "^16.5.2",
+      "react-test-renderer": "^16.5.2",
+      "recompose": "^0.30.0",
+      "styled-components": "^4.0.2",
+      "tinycolor2": "^1.4.1"
+    }
+  }
