@@ -1,28 +1,22 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from 'react'
+import { BrowserRouter, Switch, Route } from 'react-router-dom'
 
-class App extends Component {
-  render() {
-    return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
-      </div>
-    );
-  }
-}
+import AuthorizedRoute from './components/router'
+import { LOGIN_PATH } from './constants'
 
-export default App;
+import Login from './pages/login'
+
+const App = () => (
+  <BrowserRouter>
+    <Switch>
+      <Route exact path={LOGIN_PATH} component={Login} />
+      <AuthorizedRoute
+        isAuthorized={false}
+        loginPath={LOGIN_PATH}
+        component={() => <div>Layout</div>}
+      />
+    </Switch>
+  </BrowserRouter>
+)
+
+export default App
