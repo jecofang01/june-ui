@@ -1,76 +1,98 @@
-import React, { Component, Fragment, Suspense } from 'react'
-import Button from '@material-ui/core/Button'
-import Menu from '@material-ui/core/Menu'
+import React, { Fragment, useState, useRef } from 'react'
+import PropTypes from 'prop-types'
+import ClickAwayListener from '@material-ui/core/ClickAwayListener'
+import Grow from '@material-ui/core/Grow'
+import IconButton from '@material-ui/core/IconButton'
+import Language from '@material-ui/icons/Language'
 import MenuItem from '@material-ui/core/MenuItem'
-import CircularProgress from '@material-ui/core/CircularProgress'
-import { withTranslation } from 'react-i18next'
+import MenuList from '@material-ui/core/MenuList'
+import Paper from '@material-ui/core/Paper'
+import Popper from '@material-ui/core/Popper'
+import Tooltip from '@material-ui/core/Tooltip'
+import { useTranslation } from 'react-i18next'
 
-class LangPicker extends Component {
-  constructor(props) {
-    super(props)
+const LangPicker = ({ className, menuClassName, menuItemClassName, langs, ...attrs }) => {
+  const { t, i18n } = useTranslation()
 
-    this.state = {
-      anchor: null
+  const [open, setOpen] = useState(false)
+  const anchorEl = useRef(null)
+
+  function handleToggle() {
+    setOpen(!open)
+  }
+
+  function handleClose(event) {
+    if (anchorEl.current && anchorEl.current.contains(event.target)) {
+      return
     }
 
-    this.handleClick = this.handleClick.bind(this)
-    this.handleClose = this.handleClose.bind(this)
-    this.handleChangeLang = this.handleChangeLang.bind(this)
+    setOpen(false)
   }
 
-  handleClick(event) {
-    this.setState({
-      anchor: event.target
-    })
+  const handleChangeLang = lang => {
+    setOpen(false)
+    setTimeout(() => i18n.changeLanguage(lang), 0)
   }
 
-  handleClose() {
-    this.setState({
-      anchor: null
-    })
-  }
-
-  handleChangeLang(lang) {
-    const { i18n } = this.props // eslint-disable-line
-    this.setState({
-      anchor: null
-    })
-    i18n.changeLanguage(lang)
-  }
-
-  render() {
-    const { anchor } = this.state
-    const { t } = this.props // eslint-disable-line
-
-    return (
-      <Fragment>
-        <Button
-          aria-owns={anchor ? 'june-ui-lang-menu' : undefined}
+  return (
+    <Fragment>
+      <Tooltip title={t('change language')}>
+        <IconButton
+          {...attrs}
+          buttonRef={anchorEl}
+          aria-owns={open ? 'june-ui-lang-menu' : undefined}
           aria-haspopup="true"
-          onClick={this.handleClick}
+          onClick={handleToggle}
+          className={className}
         >
-          {t('currentLang')}
-        </Button>
-        <Menu
-          id="june-ui-lang-menu"
-          anchorEl={anchor}
-          open={Boolean(anchor)}
-          onClose={this.handleClose}
-        >
-          <MenuItem onClick={() => this.handleChangeLang('zh')}>中文</MenuItem>
-          <MenuItem onClick={() => this.handleChangeLang('en')}>English</MenuItem>
-        </Menu>
-      </Fragment>
-    )
-  }
+          <Language />
+        </IconButton>
+      </Tooltip>
+      <Popper open={open} anchorEl={anchorEl.current} transition disablePortal>
+        {({ TransitionProps, placement }) => (
+          <Grow
+            {...TransitionProps}
+            style={{ transformOrigin: placement === 'bottom' ? 'center top' : 'center bottom' }}
+          >
+            <Paper id="june-ui-lang-menu">
+              <ClickAwayListener onClickAway={handleClose}>
+                <MenuList className={menuClassName}>
+                  {langs.map(({ lang, name }) => (
+                    <MenuItem
+                      key={lang}
+                      onClick={() => handleChangeLang(lang)}
+                      className={menuItemClassName}
+                    >
+                      {name}
+                    </MenuItem>
+                  ))}
+                </MenuList>
+              </ClickAwayListener>
+            </Paper>
+          </Grow>
+        )}
+      </Popper>
+    </Fragment>
+  )
 }
 
-const Enhanced = withTranslation()(LangPicker)
+LangPicker.propTypes = {
+  langs: PropTypes.arrayOf(
+    PropTypes.shape({
+      lang: PropTypes.string,
+      name: PropTypes.string
+    })
+  ),
+  className: PropTypes.string,
+  menuClassName: PropTypes.string,
+  menuItemClassName: PropTypes.string
+}
 
-const Wrapped = () => (
-  <Suspense fallback={<CircularProgress />}>
-    <Enhanced />
-  </Suspense>
-)
+LangPicker.defaultProps = {
+  className: null,
+  menuClassName: null,
+  menuItemClassName: null,
+  langs: [{ lang: 'zh', name: '中文' }, { lang: 'en', name: 'English' }]
+}
 
-export default Wrapped
+export default LangPicker

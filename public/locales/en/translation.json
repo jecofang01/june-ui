@@ -1,3 +1,12 @@
 {
-  "currentLang": "English"
+  "appname": "June-ui",
+  "change language": "Change Language",
+  "email": "Email Address",
+  "password": "Password",
+  "sign in": "Sign In",
+  "home": "Home",
+  "error": {
+    "required": "This field is required",
+    "minLength": "Must be {{min}} characters or more"
+  }
 }
